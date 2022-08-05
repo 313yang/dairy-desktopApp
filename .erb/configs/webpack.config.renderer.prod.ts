@@ -18,33 +18,19 @@ import deleteSourceMaps from '../scripts/delete-source-maps';
 checkNodeEnv('production');
 deleteSourceMaps();
 
-const devtoolsConfig =
-  process.env.DEBUG_PROD === 'true'
-    ? {
-        devtool: 'source-map',
-      }
-    : {};
-
 const configuration: webpack.Configuration = {
-  ...devtoolsConfig,
+  devtool: 'source-map',
 
   mode: 'production',
 
-  target: ['web', 'electron-renderer'],
+  target: 'electron-renderer',
 
-  entry: [
-    'core-js',
-    'regenerator-runtime/runtime',
-    path.join(webpackPaths.srcRendererPath, 'index.tsx'),
-  ],
+  entry: [path.join(webpackPaths.srcRendererPath, 'index.tsx')],
 
   output: {
     path: webpackPaths.distRendererPath,
     publicPath: './',
     filename: 'renderer.js',
-    library: {
-      type: 'umd',
-    },
   },
 
   module: {
