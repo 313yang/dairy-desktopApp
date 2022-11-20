@@ -91,6 +91,13 @@ const configuration: webpack.Configuration = {
      */
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
+      APP_API_KEY: process.env.APP_API_KEY,
+      APP_AUTH_DOMAIN: process.env.APP_AUTH_DOMAIN,
+      APP_PROJECT_ID: process.env.APP_PROJECT_ID,
+      APP_STORAGE_BUCKET: process.env.APP_STORAGE_BUCKET,
+      APP_MESSAGIN_ID: process.env.APP_MESSAGIN_ID,
+      APP_APP_ID: process.env.APP_APP_ID,
+      APP_MEASUR_ID: process.env.APP_MEASUR_ID,
       DEBUG_PROD: false,
     }),
 
