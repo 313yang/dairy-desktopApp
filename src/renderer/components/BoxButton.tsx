@@ -7,6 +7,7 @@ const ButtonContainer = styled.button<{ width: string }>`
   display: flex;
   align-items: center;
   width: ${({ width }) => width || 'fit-content'};
+  margin-top: 10px;
   /* justify-content: center; */
   > .button_box {
     width: 100%;

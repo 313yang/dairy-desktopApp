@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+export const Button = styled.button.attrs({ type: 'button' })``;
 export const LinkButton = styled.button.attrs({ type: 'button' })`
   margin-top: 46px;
   font-weight: 500;
@@ -24,10 +25,10 @@ export const Label = styled.label`
 `;
 
 export const Input = styled.input`
-  width: 310px;
+  width: 340px;
   border: none;
   border-bottom: 3px solid #222;
-  margin-left: 70px;
+  margin-left: 40px;
 `;
 export const ModalContainer = styled.div<{ show: boolean }>`
   flex-direction: column;

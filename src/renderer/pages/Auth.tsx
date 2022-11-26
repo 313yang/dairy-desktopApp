@@ -10,10 +10,7 @@ import styled from 'styled-components';
 import BoxButton from 'renderer/components/BoxButton';
 import { authService } from 'lib/fbase';
 import { ErrorModal, SuccessModal } from 'renderer/components/modals/Modals';
-import googleButton from '../../images/google_social_button.svg';
-import githubButton from '../../images/github_social_button.svg';
 
-// import { GithubAuthProvider } from 'firebase/auth';
 const Container = styled.div`
   width: 100%;
   height: 100vh;
@@ -21,27 +18,6 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-`;
-const SocialButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 25%;
-  margin: 30px auto;
-`;
-const SocialButtons = styled.div`
-  display: flex;
-  width: 100%;
-  > p {
-    margin: 30px auto;
-    font-size: 16px;
-  }
-`;
-const SocialButton = styled.button.attrs({ type: 'button' })<{ bgUrl: string }>`
-  background: ${({ bgUrl }) => `center  no-repeat url(${bgUrl})`};
-  width: 50%;
-  height: 100px;
 `;
 
 const Auth = () => {
@@ -81,7 +57,6 @@ const Auth = () => {
   };
   const handleOnSubmit = async (event) => {
     event.preventDefault();
-    console.log('1');
     try {
       if (type === 'join') {
         createUserWithEmailAndPassword(authService, email, password)
@@ -93,20 +68,18 @@ const Auth = () => {
           })
           .catch((error) => {
             const errorCode = error.code;
+            console.log(errorCode);
             const errorMessage = error.message;
             if (errorCode?.includes('email-already-in-use')) {
-              console.log(
-                errorCode,
-                errorCode?.includes('email-already-in-use')
-              );
-              return handleError('이미 존재하는 이메일입니다.');
-            }
+              handleError('이미 존재하는 이메일입니다.');
+            } else if (errorCode?.includes('weak-password'))
+              handleError('비밀번호를 6자리 이상 설정해주세요');
           });
       } else {
         signInWithEmailAndPassword(authService, email, password)
           .then((userCredential) => {
             // Signed in
-            const user = userCredential.user;
+            const { user } = userCredential;
             console.log(user);
             if (user) navigate('/home');
             // ...
@@ -119,22 +92,12 @@ const Auth = () => {
               setLoginError('이메일이 존재하지 않아요');
             else if (errorCode === 'auth/wrong-password')
               setLoginError('비밀번호가 일치하지 않아요');
+            else setLoginError('잠시 후 다시 시도해주세요');
           });
       }
     } catch (error) {
       console.log('error:::', error);
     }
-  };
-
-  const onSocialLogin = async ({ target }) => {
-    //   const { name } = target;
-    //   let provider;
-    //   if (name === 'google') {
-    //     provider = new firebaseInstance()?.auth.GoogleAuthProvider();
-    //   } else if (name === 'github') {
-    //     provider = new firebaseInstance()?.auth.GithubAuthProvider();
-    //   }
-    //   await authService?.signInWithPopup(provider);
   };
 
   return (
@@ -198,23 +161,7 @@ const Auth = () => {
           text={type === 'login' ? '로그인' : '회원가입'}
         />
       </Form>
-      <SocialButtonContainer>
-        <p>- 또는 -</p>
-        <SocialButtons>
-          <SocialButton
-            bgUrl={googleButton}
-            name="google"
-            onClick={onSocialLogin}
-          />
 
-          <SocialButton
-            bgUrl={githubButton}
-            name="github"
-            onClick={onSocialLogin}
-          />
-        </SocialButtons>
-        <p>으로 시작하기</p>
-      </SocialButtonContainer>
       {type === 'login' ? (
         <LinkButton onClick={() => navigate('/auth/join')}>
           아직 회원이 아니신가요?
